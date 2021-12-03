@@ -18,7 +18,7 @@
 //! Various pieces of common functionality.
 
 use super::*;
-use frame_support::{ensure, traits::Get};
+use frame_support::{ensure, traits::Get, BoundedVec};
 use sp_runtime::{DispatchError, DispatchResult};
 
 impl<T: Config<I>, I: 'static> Pallet<T, I> {
@@ -57,7 +57,8 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		class: T::RmrkCollectionId,
 		issuer: T::AccountId,
 		max: Option<u32>,
-		// symbol: BoundedVec,
+		// symbol: BoundedVec<u8, T::ValueLimit>,
+		symbol: Vec<u8>,
 		event: Event<T, I>,
 	) -> DispatchResult {
 		ensure!(!RmrkCollection::<T, I>::contains_key(class), Error::<T, I>::InUse);
@@ -69,11 +70,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		};
 		RmrkCollection::<T, I>::insert(
 			class,
-			RmrkCollectionDetails {
-				issuer: issuer.clone(),
-				max: m,
-				// symbol
-			},
+			RmrkCollectionDetails { issuer: issuer.clone(), max: m, symbol },
 		);
 
 		Self::deposit_event(event);

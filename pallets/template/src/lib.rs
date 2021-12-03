@@ -120,7 +120,7 @@ pub mod pallet {
 		/// Weight information for extrinsics in this pallet.
 		type WeightInfo: WeightInfo;
 	}
-
+	// pub(super) type Attribute<T: Config<I>, I: 'static = ()> = StorageNMap< //DELETE
 	#[pallet::storage]
 	/// Details of an asset class.
 	#[pallet::getter(fn get_rmrk_collection)]
@@ -344,6 +344,7 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			#[pallet::compact] class: T::RmrkCollectionId,
 			max: Option<u32>,
+			symbol: BoundedVec<u8, T::ValueLimit>,
 			// admin: <T::Lookup as StaticLookup>::Source,
 		) -> DispatchResult {
 			// println!("hello");
@@ -356,6 +357,7 @@ pub mod pallet {
 				class,
 				owner.clone(),
 				max,
+				symbol.to_vec(),
 				// admin.clone(),
 				// T::ClassDeposit::get(),
 				// false,

@@ -588,7 +588,7 @@ fn cancel_approval_works_with_force() {
 fn rmrk_create_collection_should_work() {
 	new_test_ext().execute_with(|| {
 		println!("or: {:?}", Origin::signed(0));
-		assert_ok!(Uniques::create_rmrk_collection(Origin::signed(0), 0, Some(111)));
+		assert_ok!(Uniques::create_rmrk_collection(Origin::signed(0), 0, Some(111), stv("KAN")));
 		// assert_ok!(Uniques::create_rmrk_collection(Origin::signed(0), 0));
 		// assert_ok!(Uniques::mint(Origin::signed(1), 0, 42, 2));
 
@@ -606,6 +606,10 @@ fn rmrk_create_collection_should_work() {
 		// 	Error::<Test>::NoDelegate
 		// );
 	});
+}
+
+fn stv(s: &str) -> BoundedVec<u8, ValueLimit> {
+	s.as_bytes().to_vec().try_into().unwrap()
 }
 
 pub fn encode_hex(bytes: &[u8]) -> String {
@@ -631,7 +635,7 @@ fn set_rmrk_collection_metadata_should_work() {
 		// let x = bvec![1, 2, 3, 4];
 		// let b = BoundedVec::try_from([1, 23, 4]);
 		// println!("x: {:?}", x);
-		let u = Uniques::create_rmrk_collection(Origin::signed(0), 0, Some(324));
+		let u = Uniques::create_rmrk_collection(Origin::signed(0), 0, Some(324), stv("KAN"));
 		// let x = vec![1, 2, 3, 4, 5];
 
 		let t = Uniques::set_rmrk_collection_metadata(
@@ -650,7 +654,7 @@ fn changeissuer_should_work() {
 	new_test_ext().execute_with(|| {
 		Balances::make_free_balance_be(&0, 100);
 
-		assert_ok!(Uniques::create_rmrk_collection(Origin::signed(0), 0, Some(123)));
+		assert_ok!(Uniques::create_rmrk_collection(Origin::signed(0), 0, Some(123), stv("KAN")));
 
 		let x = Uniques::get_rmrk_collection(0);
 		println!("x: {:?}", x);

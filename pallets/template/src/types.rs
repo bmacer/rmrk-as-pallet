@@ -28,13 +28,26 @@ pub(super) type ClassDetailsFor<T, I> =
 pub(super) type InstanceDetailsFor<T, I> =
 	InstanceDetails<<T as SystemConfig>::AccountId, DepositBalanceOf<T, I>>;
 
+// #[derive(Clone, Encode, Decode, Eq, PartialEq, RuntimeDebug, TypeInfo)]
+/*
+// Had to take out RuntimeDebug bc ValueLimit doesn't like it :\
+the trait bound `ValueLimit: std::fmt::Debug` is not satisfied
+
+expected an implementor of trait `std::fmt::Debug`
+
+note: required because of the requirements on the impl of `std::fmt::Debug` for `mock::sp_api_hidden_includes_construct_runtime::hidden_include::BoundedVec<u32, ValueLimit>`
+note: required for the cast to the object type `dyn std::fmt::Debug`rustc(E0277)
+types.rs(37, 48): expected an implementor of trait `std::fmt::Debug`
+the trait bound `ValueLimit: std::fmt::Debug` is not satisfied
+*/
 #[derive(Clone, Encode, Decode, Eq, PartialEq, RuntimeDebug, TypeInfo)]
 pub struct RmrkCollectionDetails<AccountId> {
 	/// Can mint tokens.
 	pub(super) issuer: AccountId,
 	pub(super) max: u32,
+	pub(super) symbol: Vec<u8>,
 	// Can thaw tokens, force transfers and burn tokens from any account.
-	// pub(super) symbol: BoundedVec<u8, StringLimit>,
+	// pub(super) symbol: BoundedVec<u8, StringLimit>
 }
 
 #[derive(Clone, Encode, Decode, Eq, PartialEq, RuntimeDebug, TypeInfo)]
